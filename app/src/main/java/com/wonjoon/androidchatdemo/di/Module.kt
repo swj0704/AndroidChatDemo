@@ -12,12 +12,13 @@ import com.wonjoon.domain.ChatRepository
 import com.wonjoon.domain.UserRepository
 import com.wonjoon.domain.usecase.GetChatRoomUseCase
 import com.wonjoon.domain.usecase.LoginUseCase
+import com.wonjoon.domain.usecase.SearchChatRoomUseCase
+import com.wonjoon.domain.usecase.SignUpUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -32,6 +33,17 @@ object Module {
     @Singleton
     fun provideLoginUseCase(repository: UserRepository) : LoginUseCase{
         return LoginUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchChatRoomUseCase(repository: ChatRepository) : SearchChatRoomUseCase{
+        return SearchChatRoomUseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun provideSignUpUseCase(repository: UserRepository) : SignUpUseCase{
+        return SignUpUseCase(repository)
     }
 
 

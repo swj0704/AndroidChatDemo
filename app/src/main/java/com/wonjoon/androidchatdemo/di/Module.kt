@@ -3,8 +3,11 @@ package com.wonjoon.androidchatdemo.di
 import com.wonjoon.androidchatdemo.BuildConfig
 import com.wonjoon.data.API
 import com.wonjoon.data.ChatRepositoryImpl
+import com.wonjoon.data.UserRepositoryImpl
 import com.wonjoon.domain.ChatRepository
+import com.wonjoon.domain.UserRepository
 import com.wonjoon.domain.usecase.GetChatRoomUseCase
+import com.wonjoon.domain.usecase.LoginUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,18 +25,27 @@ object Module {
     @Provides
     @Singleton
     fun provideGetChatRoomUseCase() : GetChatRoomUseCase{
-        return GetChatRoomUseCase(provideRepository())
+        return GetChatRoomUseCase(provideChatRepository())
+    }
+    @Provides
+    @Singleton
+    fun provideLoginUseCase() : LoginUseCase{
+        return LoginUseCase(provideUserRepository())
     }
 
     @Provides
     @Singleton
-    fun provideRepository() : ChatRepository{
+    fun provideChatRepository() : ChatRepository{
         return ChatRepositoryImpl(provideApi())
     }
 
     @Provides
     @Singleton
-    fun provideOkHttpClient() : OkHttpClient {
+    fun provideUserRepository() : UserRepository{
+        return UserRepositoryImpl(provideApi())
+    }
+
+    private fun provideOkHttpClient() : OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
@@ -46,9 +58,7 @@ object Module {
             .addInterceptor(httpLoggingInterceptor).build()
     }
 
-    @Provides
-    @Singleton
-    fun provideGsonConverter() : Converter.Factory{
+    private fun provideGsonConverter() : Converter.Factory{
         return GsonConverterFactory.create() as Converter.Factory
     }
 
@@ -56,7 +66,7 @@ object Module {
     @Singleton
     fun provideApi() : API{
         return Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("http://192.168.0.1/")
             .addConverterFactory(provideGsonConverter())
             .client(provideOkHttpClient())
             .build()

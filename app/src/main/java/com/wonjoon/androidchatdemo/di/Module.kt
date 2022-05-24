@@ -1,9 +1,13 @@
 package com.wonjoon.androidchatdemo.di
 
-import com.wonjoon.androidchatdemo.BuildConfig
-import com.wonjoon.data.API
+import android.content.Context
+import androidx.room.Room
 import com.wonjoon.data.ChatRepositoryImpl
 import com.wonjoon.data.UserRepositoryImpl
+import com.wonjoon.data.room.chat.ChatDao
+import com.wonjoon.data.room.chat.ChatDatabase
+import com.wonjoon.data.room.user.UserDao
+import com.wonjoon.data.room.user.UserDatabase
 import com.wonjoon.domain.ChatRepository
 import com.wonjoon.domain.UserRepository
 import com.wonjoon.domain.usecase.GetChatRoomUseCase
@@ -11,11 +15,8 @@ import com.wonjoon.domain.usecase.LoginUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Converter
-import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -24,52 +25,55 @@ import javax.inject.Singleton
 object Module {
     @Provides
     @Singleton
-    fun provideGetChatRoomUseCase() : GetChatRoomUseCase{
-        return GetChatRoomUseCase(provideChatRepository())
+    fun provideGetChatRoomUseCase(repository: ChatRepository) : GetChatRoomUseCase{
+        return GetChatRoomUseCase(repository)
     }
     @Provides
     @Singleton
-    fun provideLoginUseCase() : LoginUseCase{
-        return LoginUseCase(provideUserRepository())
+    fun provideLoginUseCase(repository: UserRepository) : LoginUseCase{
+        return LoginUseCase(repository)
     }
+
 
     @Provides
     @Singleton
-    fun provideChatRepository() : ChatRepository{
-        return ChatRepositoryImpl(provideApi())
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserRepository() : UserRepository{
-        return UserRepositoryImpl(provideApi())
-    }
-
-    private fun provideOkHttpClient() : OkHttpClient {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
-        }
-
-        return OkHttpClient.Builder()
-            .addInterceptor(httpLoggingInterceptor).build()
-    }
-
-    private fun provideGsonConverter() : Converter.Factory{
-        return GsonConverterFactory.create() as Converter.Factory
+    fun provideChatRepository(dao: ChatDao) : ChatRepository {
+        return ChatRepositoryImpl(dao)
     }
 
     @Provides
     @Singleton
-    fun provideApi() : API{
-        return Retrofit.Builder()
-            .baseUrl("http://192.168.0.1/")
-            .addConverterFactory(provideGsonConverter())
-            .client(provideOkHttpClient())
-            .build()
-            .create(API::class.java)
+    fun provideUserRepository(dao: UserDao) : UserRepository {
+        return UserRepositoryImpl(dao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserDao(dataBase: UserDatabase) : UserDao {
+        return dataBase.getDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserDataBase(@ApplicationContext appContext: Context) : UserDatabase{
+        return provideUserDB(appContext)
+    }
+
+    @Singleton
+    @Provides
+    fun provideChatDao(dataBase: ChatDatabase) : ChatDao {
+        return dataBase.getDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideChatDataBase(@ApplicationContext appContext: Context) : ChatDatabase {
+        return provideChatDB(appContext)
     }
 }
+
+internal fun provideUserDB(context: Context): UserDatabase =
+    Room.databaseBuilder(context, UserDatabase::class.java, "userDatabase.db").build()
+
+internal fun provideChatDB(context: Context): ChatDatabase =
+    Room.databaseBuilder(context, ChatDatabase::class.java, "userDatabase.db").build()

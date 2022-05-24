@@ -1,6 +1,6 @@
 package com.wonjoon.data.mapper
 
-import com.wonjoon.data.ChatRoom
+import com.wonjoon.data.room.chat.ChatRoom
 import com.wonjoon.domain.ChatRoomItemModel
 
 object ChatRoomMapper {

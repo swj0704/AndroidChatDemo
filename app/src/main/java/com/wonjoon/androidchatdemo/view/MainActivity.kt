@@ -1,7 +1,8 @@
-package com.wonjoon.androidchatdemo
+package com.wonjoon.androidchatdemo.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.wonjoon.androidchatdemo.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

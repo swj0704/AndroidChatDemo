@@ -34,12 +34,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         viewModel.userItemModel.observe(this) {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("name", it.name)
-            intent.putExtra("uuid", it.uuid)
             prefs.name = it.name
             prefs.pubnubUuid = it.uuid
-            startActivity(intent)
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
     }

@@ -21,10 +21,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if(prefs.name != ""){
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("name", prefs.name)
-            intent.putExtra("uuid", prefs.pubnubUuid)
-            startActivity(intent)
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
             startActivity(Intent(this, LoginActivity::class.java))

@@ -13,14 +13,6 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    val name : String by lazy{
-        intent.getStringExtra("name")?:""
-    }
-
-    val uuid : String by lazy{
-        intent.getStringExtra("uuid")?:""
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

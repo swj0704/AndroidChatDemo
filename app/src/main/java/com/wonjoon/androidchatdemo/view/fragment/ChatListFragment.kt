@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.wonjoon.androidchatdemo.R
 import com.wonjoon.androidchatdemo.databinding.FragmentChatListBinding
 import com.wonjoon.androidchatdemo.di.Prefs
 import com.wonjoon.androidchatdemo.view.activity.LoginActivity
@@ -42,7 +44,7 @@ class ChatListFragment : Fragment() {
         viewModel.getChatList()
 
         binding.search.setOnClickListener {
-
+            findNavController().navigate(R.id.action_chat_list_to_chat_search)
         }
 
         binding.logout.setOnClickListener {

@@ -8,18 +8,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wonjoon.androidchatdemo.databinding.ItemSearchChatRoomBinding
 import com.wonjoon.domain.ChatRoomItemModel
 
-class ChatSearchAdapter : ListAdapter<ChatRoomItemModel, ChatSearchAdapter.ChatSearchListViewHolder>(ChatSearchDiff) {
+interface OnClickChatSearchListener{
+    fun onClick(chatRoom : ChatRoomItemModel)
+}
+
+class ChatSearchAdapter(val onClick : OnClickChatSearchListener) : ListAdapter<ChatRoomItemModel, ChatSearchAdapter.ChatSearchListViewHolder>(ChatSearchDiff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatSearchListViewHolder {
-        return ChatSearchListViewHolder(ItemSearchChatRoomBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ChatSearchListViewHolder(ItemSearchChatRoomBinding.inflate(LayoutInflater.from(parent.context), parent, false), onClick)
     }
 
     override fun onBindViewHolder(holder: ChatSearchListViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class ChatSearchListViewHolder(val binding : ItemSearchChatRoomBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ChatSearchListViewHolder(val binding : ItemSearchChatRoomBinding, val onClick: OnClickChatSearchListener) : RecyclerView.ViewHolder(binding.root){
         fun bind(item : ChatRoomItemModel){
             binding.item = item
+            binding.handler = onClick
         }
     }
 }

@@ -10,10 +10,7 @@ import com.wonjoon.data.room.user.UserDao
 import com.wonjoon.data.room.user.UserDatabase
 import com.wonjoon.domain.ChatRepository
 import com.wonjoon.domain.UserRepository
-import com.wonjoon.domain.usecase.GetChatRoomUseCase
-import com.wonjoon.domain.usecase.LoginUseCase
-import com.wonjoon.domain.usecase.SearchChatRoomUseCase
-import com.wonjoon.domain.usecase.SignUpUseCase
+import com.wonjoon.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,6 +36,12 @@ object Module {
     @Singleton
     fun provideSearchChatRoomUseCase(repository: ChatRepository) : SearchChatRoomUseCase{
         return SearchChatRoomUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInsertChatRoomUseCase(repository: ChatRepository) : InsertChatRoomUseCase{
+        return InsertChatRoomUseCase(repository)
     }
     @Provides
     @Singleton

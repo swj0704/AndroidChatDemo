@@ -20,4 +20,10 @@ class ChatRepositoryImpl @Inject constructor(
             ChatRoomMapper.dataToDomain(it)
         }
     }
+
+    override suspend fun insertChatRoom(chatRoomItemModel: ChatRoomItemModel) {
+        return dao.insertChatRoom(
+            ChatRoomMapper.domainToData(chatRoomItemModel)
+        )
+    }
 }

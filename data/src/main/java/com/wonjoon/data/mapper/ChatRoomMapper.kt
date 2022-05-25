@@ -12,4 +12,13 @@ object ChatRoomMapper {
             name = chatRoom.name
         )
     }
+
+    fun domainToData(chatRoomItemModel: ChatRoomItemModel) : ChatRoom{
+        return ChatRoom(
+            id = chatRoomItemModel.id,
+            pubnubChannel = chatRoomItemModel.pubnubChannel,
+            pubnubUUID = chatRoomItemModel.pubnubUUID,
+            name = chatRoomItemModel.name
+        )
+    }
 }

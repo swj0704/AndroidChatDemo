@@ -13,6 +13,7 @@
         <entry key="app/src/main/res/layout/fragment_chat_list.xml" value="0.5158457438151042" />
         <entry key="app/src/main/res/layout/fragment_chat_search.xml" value="0.6776041666666667" />
         <entry key="app/src/main/res/layout/item_chat_room.xml" value="0.4471954345703125" />
+        <entry key="app/src/main/res/layout/item_search_chat_room.xml" value="0.6765625" />
       </map>
     </option>
   </component>

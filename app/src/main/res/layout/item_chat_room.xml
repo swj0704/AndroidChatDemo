@@ -7,6 +7,9 @@
         <variable
             name="item"
             type="com.wonjoon.domain.ChatRoomItemModel" />
+        <variable
+            name="handler"
+            type="com.wonjoon.androidchatdemo.view.adapter.OnClickChatRoomListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +17,7 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
+        android:onClick="@{() -> handler.onClick(item)}"
         android:background="@color/white">
 
         <androidx.appcompat.widget.AppCompatImageView

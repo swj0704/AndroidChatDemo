@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.wonjoon.androidchatdemo.R
 import com.wonjoon.androidchatdemo.databinding.FragmentChatListBinding
 import com.wonjoon.androidchatdemo.di.Prefs
+import com.wonjoon.androidchatdemo.view.activity.ChatActivity
 import com.wonjoon.androidchatdemo.view.activity.LoginActivity
 import com.wonjoon.androidchatdemo.viewmodel.ChatListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +46,14 @@ class ChatListFragment : Fragment() {
 
         binding.search.setOnClickListener {
             findNavController().navigate(R.id.action_chat_list_to_chat_search)
+        }
+
+        viewModel.chatRoom.observe(viewLifecycleOwner){
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            intent.putExtra("name", it.name)
+            intent.putExtra("pubnubChannel", it.pubnubChannel + prefs.pubnubUuid)
+            intent.putExtra("pubnubUUID", it.pubnubUUID)
+            startActivity(intent)
         }
 
         binding.logout.setOnClickListener {

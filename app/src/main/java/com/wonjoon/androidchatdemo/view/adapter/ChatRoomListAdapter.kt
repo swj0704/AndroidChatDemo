@@ -8,18 +8,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wonjoon.androidchatdemo.databinding.ItemChatRoomBinding
 import com.wonjoon.domain.ChatRoomItemModel
 
-class ChatRoomListAdapter : ListAdapter<ChatRoomItemModel, ChatRoomListAdapter.ChatRoomListViewHolder>(ChatRoomDiff) {
+interface OnClickChatRoomListener{
+    fun onClick(chatRoomItemModel: ChatRoomItemModel)
+}
+
+class ChatRoomListAdapter(val onClickChatRoomListener: OnClickChatRoomListener) : ListAdapter<ChatRoomItemModel, ChatRoomListAdapter.ChatRoomListViewHolder>(ChatRoomDiff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomListViewHolder {
-        return ChatRoomListViewHolder(ItemChatRoomBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ChatRoomListViewHolder(ItemChatRoomBinding.inflate(LayoutInflater.from(parent.context), parent, false), onClickChatRoomListener)
     }
 
     override fun onBindViewHolder(holder: ChatRoomListViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class ChatRoomListViewHolder(val binding : ItemChatRoomBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ChatRoomListViewHolder(val binding : ItemChatRoomBinding, val onClickChatRoomListener: OnClickChatRoomListener) : RecyclerView.ViewHolder(binding.root){
         fun bind(item : ChatRoomItemModel){
             binding.item = item
+            binding.handler = onClickChatRoomListener
         }
     }
 }

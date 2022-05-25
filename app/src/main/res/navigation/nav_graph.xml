@@ -8,7 +8,17 @@
     <fragment
         android:id="@+id/chat_list"
         android:name="com.wonjoon.androidchatdemo.view.fragment.ChatListFragment"
-        android:label="pick_gender"
-        tools:layout="@layout/fragment_chat_list"/>
+        android:label="chat_list"
+        tools:layout="@layout/fragment_chat_list">
+        <action
+            android:id="@+id/action_chat_list_to_chat_search"
+            app:destination="@id/chat_search" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chat_search"
+        android:name="com.wonjoon.androidchatdemo.view.fragment.ChatSearchFragment"
+        android:label="chat_search"
+        tools:layout="@layout/fragment_chat_search"/>
 
 </navigation>

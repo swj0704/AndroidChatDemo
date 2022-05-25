@@ -1,5 +1,6 @@
 package com.wonjoon.androidchatdemo.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,8 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.wonjoon.androidchatdemo.databinding.FragmentChatListBinding
+import com.wonjoon.androidchatdemo.di.Prefs
+import com.wonjoon.androidchatdemo.view.activity.LoginActivity
 import com.wonjoon.androidchatdemo.viewmodel.ChatListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChatListFragment : Fragment() {
@@ -18,6 +23,9 @@ class ChatListFragment : Fragment() {
     }
 
     val viewModel : ChatListViewModel by viewModels()
+
+    @Inject
+    lateinit var prefs: Prefs
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +39,17 @@ class ChatListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getChatList()
+
         binding.search.setOnClickListener {
 
+        }
+
+        binding.logout.setOnClickListener {
+            prefs.name = ""
+            prefs.pubnubUuid = UUID.randomUUID().toString()
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            requireActivity().finishAffinity()
         }
     }
 }

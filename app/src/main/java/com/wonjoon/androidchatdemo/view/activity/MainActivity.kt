@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.wonjoon.androidchatdemo.R
 import com.wonjoon.androidchatdemo.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     val binding by lazy{
@@ -13,6 +15,10 @@ class MainActivity : AppCompatActivity() {
 
     val name : String by lazy{
         intent.getStringExtra("name")?:""
+    }
+
+    val uuid : String by lazy{
+        intent.getStringExtra("uuid")?:""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

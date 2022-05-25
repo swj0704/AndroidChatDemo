@@ -79,6 +79,12 @@ object Module {
 
     @Singleton
     @Provides
+    fun providePrefs(@ApplicationContext context: Context) : Prefs{
+        return Prefs(context)
+    }
+
+    @Singleton
+    @Provides
     fun provideChatDataBase(@ApplicationContext appContext: Context) : ChatDatabase {
         return provideChatDB(appContext)
     }
@@ -88,4 +94,4 @@ internal fun provideUserDB(context: Context): UserDatabase =
     Room.databaseBuilder(context, UserDatabase::class.java, "userDatabase.db").build()
 
 internal fun provideChatDB(context: Context): ChatDatabase =
-    Room.databaseBuilder(context, ChatDatabase::class.java, "userDatabase.db").build()
+    Room.databaseBuilder(context, ChatDatabase::class.java, "chatDatabase.db").build()

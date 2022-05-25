@@ -21,9 +21,11 @@ class SignUpViewModel @Inject constructor(
     val loginEvent = SingleLiveEvent<Unit>()
 
     fun signUp(email : String, password : String, name : String){
-        viewModelScope.launch {
-            signUpUseCase(email, password, name)
-            loginEvent.call()
+        if(email.isNotBlank() && password.isNotBlank() && name.isNotBlank()) {
+            viewModelScope.launch {
+                signUpUseCase(email, password, name)
+                loginEvent.call()
+            }
         }
     }
 }

@@ -8,7 +8,8 @@ object UserMapper {
         return UserItemModel(
             name = user.name,
             email = user.email,
-            password = user.password
+            password = user.password,
+            uuid = user.uuid
         )
     }
 }

@@ -30,9 +30,10 @@ class ChatViewModel @Inject constructor(val prefs: Prefs) : ViewModel(){
     val size : LiveData<Int>
         get() = _size
 
-    fun receiveMessage(pnMessageResult: PNMessageResult){
+    fun receiveMessage(channelName: String, pnMessageResult: PNMessageResult){
         chatList.add(pnMessageResult.message.asJsonObject.toPubnubChatObject())
         adapter.submitList(chatList)
+        prefs.preferences.edit().putLong(channelName, pnMessageResult.timetoken?:0L).apply()
         _size.value = chatList.size - 1
     }
 
@@ -46,7 +47,7 @@ class ChatViewModel @Inject constructor(val prefs: Prefs) : ViewModel(){
             ).async { result, status ->
                 if(!status.error){
                     result?.let {
-                        val convertMessage = result.messages.filter { historyItemResult ->
+                        val convertMessage = it.messages.filter { historyItemResult ->
                             val messageObj = historyItemResult.entry.asJsonObject
                             if (messageObj.has("message")) {
                                 val msgObj = messageObj.get("message").asJsonObject
@@ -61,6 +62,8 @@ class ChatViewModel @Inject constructor(val prefs: Prefs) : ViewModel(){
 
                         chatList.clear()
                         chatList.addAll(convertMessage)
+
+                        prefs.preferences.edit().putLong(channelName, if(it.startTimetoken > it.endTimetoken) it.startTimetoken else it.endTimetoken).apply()
 
                         adapter.submitList(convertMessage)
                     }

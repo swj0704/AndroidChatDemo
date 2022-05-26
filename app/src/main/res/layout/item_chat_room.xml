@@ -65,6 +65,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textColor="#606060"
+            android:layout_marginStart="10dp"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@+id/tv_rv_message"
             app:layout_constraintTop_toTopOf="@+id/tv_rv_message"

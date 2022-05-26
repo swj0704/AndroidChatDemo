@@ -90,7 +90,7 @@ class ChatActivity : AppCompatActivity() {
         override fun presence(pubnub: PubNub, pnPresenceEventResult: PNPresenceEventResult) {}
         override fun message(pubnub: PubNub, pnMessageResult: PNMessageResult) {
             this@ChatActivity.runOnUiThread {
-                viewModel.receiveMessage(pnMessageResult)
+                viewModel.receiveMessage(pubnubChannel, pnMessageResult)
             }
         }
         override fun signal(pubnub: PubNub, pnSignalResult: PNSignalResult) {}

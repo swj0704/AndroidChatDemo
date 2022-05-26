@@ -4,5 +4,6 @@ data class ChatRoomItemModel(
     val id : Int,
     val name : String,
     val pubnubChannel : String,
-    val pubnubUUID : String
+    val pubnubUUID : String,
+    var count : Int = 0
 )

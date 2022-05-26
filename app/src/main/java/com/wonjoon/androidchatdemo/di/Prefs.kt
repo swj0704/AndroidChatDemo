@@ -10,7 +10,7 @@ class Prefs @Inject constructor(context: Context) {
     private val NAME = "NAME"
 
 
-    private val preferences: SharedPreferences = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
+    val preferences: SharedPreferences = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
 
     var pubnubUuid: String
         get() = preferences.getString(PUBNUB_UUID, UUID.randomUUID().toString()).orEmpty()

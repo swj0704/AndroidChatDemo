@@ -3,9 +3,18 @@ package com.wonjoon.androidchatdemo.util
 import com.pubnub.api.PNConfiguration
 import com.pubnub.api.PubNub
 import com.pubnub.api.enums.PNLogVerbosity
+import com.wonjoon.androidchatdemo.model.ChatMessageData
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 object Util {
     var pubnub : PubNub? = null
+
+    val adapterMessage: BehaviorSubject<Map<String, ChatMessageData>> = BehaviorSubject.create()
+    val message: BehaviorSubject<Map<String, ChatMessageData>> = BehaviorSubject.create()
+    val badge: BehaviorSubject<Map.Entry<String, Long>> = BehaviorSubject.create()
+
+    val compositeDisposable = CompositeDisposable()
 
     fun initPubNubInstance(uuid : String) {
         if(getDefaultPnConfiguration(uuid) != null) {

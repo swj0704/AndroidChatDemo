@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.pubnub.api.models.consumer.PNBoundedPage
 import com.pubnub.api.models.consumer.history.PNFetchMessageItem
 import com.wonjoon.androidchatdemo.di.Prefs
+import com.wonjoon.androidchatdemo.model.ChatItemModel
 import com.wonjoon.androidchatdemo.model.ChatMessageData
+import com.wonjoon.androidchatdemo.model.PubnubChatObject
 import com.wonjoon.androidchatdemo.util.Util
 import com.wonjoon.androidchatdemo.view.adapter.ChatRoomListAdapter
 import com.wonjoon.androidchatdemo.view.adapter.OnClickChatRoomListener
@@ -28,10 +30,18 @@ class ChatListViewModel @Inject constructor(
     val chatRoom : LiveData<ChatRoomItemModel>
         get() = _chatRoom
 
+    private val _subscribeList = MutableLiveData<List<String>>()
+    val subscribeList : LiveData<List<String>>
+        get() = _subscribeList
+
     val listener by lazy{
         object : OnClickChatRoomListener{
             override fun onClick(chatRoomItemModel: ChatRoomItemModel) {
                 _chatRoom.value = chatRoomItemModel
+            }
+
+            override fun onClickTestOutRoom(chatRoomItemModel: ChatRoomItemModel) {
+                test(chatRoomItemModel.pubnubChannel + prefs.pubnubUuid, chatRoomItemModel.name, chatRoomItemModel.pubnubUUID)
             }
         }
     }
@@ -41,28 +51,36 @@ class ChatListViewModel @Inject constructor(
     }
 
     fun getChatList(){
-        Util.compositeDisposable.clear()
         viewModelScope.launch {
             val list = getChatRoomUseCase()
             adapter.submitList(list)
 
-            val channelList = ArrayList<String>()
-            val timeList = ArrayList<Long>()
             val lastMessageList = ArrayList<String>()
 
             list.forEach{
                 lastMessageList.add(it.pubnubChannel + prefs.pubnubUuid)
-                if(prefs.preferences.contains(it.pubnubChannel + prefs.pubnubUuid)){
-                    channelList.add(it.pubnubChannel + prefs.pubnubUuid)
-                    timeList.add(prefs.preferences.getLong(it.pubnubChannel + prefs.pubnubUuid, System.currentTimeMillis() * 10000))
-                }
             }
 
-            getLastMessage(channelList, timeList, list, lastMessageList)
+            _subscribeList.value = lastMessageList
+
+            getLastMessage(list, lastMessageList)
         }
     }
 
-    fun getLastMessage(channelList : ArrayList<String>, time : ArrayList<Long>, chatRooms: List<ChatRoomItemModel>, lastMessageList : ArrayList<String>){
+    fun test(channelName: String, name : String, uuid : String){
+        val message = PubnubChatObject(ChatItemModel(name, name, uuid))
+        if (Util.pubnub != null && channelName != "") {
+            Util.pubnub!!.publish(
+                channel = channelName,
+                message = message,
+                shouldStore = true
+            ).async { result, status ->
+
+            }
+        }
+    }
+
+    fun getLastMessage(chatRooms: List<ChatRoomItemModel>, lastMessageList : ArrayList<String>){
         if(Util.pubnub != null) {
             Util.pubnub!!.fetchMessages(
                 channels = lastMessageList,
@@ -84,22 +102,6 @@ class ChatListViewModel @Inject constructor(
                             )
                             Util.adapterMessage.onNext(map)
                         }
-                        Util.pubnub!!.messageCounts(
-                            channels = channelList.toList(),
-                            channelsTimetoken = time.toList()
-                        )
-                            .async { result, status ->
-                                if (status.error) {
-                                    status.exception?.printStackTrace()
-                                } else {
-                                    if (result?.channels?.entries != null) {
-
-                                        result.channels.entries.map { entry ->
-                                            Util.badge.onNext(entry)
-                                        }
-                                    }
-                                }
-                            }
                     }
                 } else {
                     System.err.println("Handling error")

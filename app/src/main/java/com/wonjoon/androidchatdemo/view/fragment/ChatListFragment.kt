@@ -63,6 +63,15 @@ class ChatListFragment : Fragment() {
             startActivity(intent)
         }
 
+        viewModel.subscribeList.observe(viewLifecycleOwner){
+            if(Util.pubnub != null) {
+                Util.pubnub!!.subscribe(
+                    channels = it,
+                    withPresence = true
+                )
+            }
+        }
+
         binding.logout.setOnClickListener {
             prefs.name = ""
             prefs.pubnubUuid = UUID.randomUUID().toString()
@@ -77,6 +86,11 @@ class ChatListFragment : Fragment() {
         if(Util.pubnub != null) {
             Util.pubnub!!.addListener(subscribeCallback)
         }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Util.compositeDisposable.clear()
     }
 
     override fun onPause() {

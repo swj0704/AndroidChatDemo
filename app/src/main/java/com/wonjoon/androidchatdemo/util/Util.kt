@@ -12,7 +12,6 @@ object Util {
 
     val adapterMessage: BehaviorSubject<Map<String, ChatMessageData>> = BehaviorSubject.create()
     val message: BehaviorSubject<Map<String, ChatMessageData>> = BehaviorSubject.create()
-    val badge: BehaviorSubject<Map.Entry<String, Long>> = BehaviorSubject.create()
 
     val compositeDisposable = CompositeDisposable()
 

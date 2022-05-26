@@ -17,12 +17,10 @@ import java.util.HashMap
 
 interface OnClickChatRoomListener{
     fun onClick(chatRoomItemModel: ChatRoomItemModel)
+    fun onClickTestOutRoom(chatRoomItemModel: ChatRoomItemModel)
 }
 
 class ChatRoomListAdapter(val onClickChatRoomListener: OnClickChatRoomListener, val prefs : Prefs) : ListAdapter<ChatRoomItemModel, ChatRoomListAdapter.ChatRoomListViewHolder>(ChatRoomDiff) {
-
-    val map = HashMap<String, Int>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomListViewHolder {
         return ChatRoomListViewHolder(ItemChatRoomBinding.inflate(LayoutInflater.from(parent.context), parent, false), onClickChatRoomListener)
     }
@@ -32,17 +30,11 @@ class ChatRoomListAdapter(val onClickChatRoomListener: OnClickChatRoomListener, 
         holder.remove()
         holder.bind(item)
         holder.subscribe(item)
-
-        if(!map.containsKey(item.pubnubChannel)) {
-            holder.subscribeCount(item)
-            map[item.pubnubChannel] = position
-        }
     }
 
     inner class ChatRoomListViewHolder(val binding : ItemChatRoomBinding, val onClickChatRoomListener: OnClickChatRoomListener) : RecyclerView.ViewHolder(binding.root){
         var messageDispose : Disposable? = null
         var adapterMessageDispose : Disposable? = null
-        var badgeDispose : Disposable? = null
 
         fun bind(item : ChatRoomItemModel){
             binding.item = item
@@ -52,15 +44,9 @@ class ChatRoomListAdapter(val onClickChatRoomListener: OnClickChatRoomListener, 
         fun subscribe(item : ChatRoomItemModel){
             messageDispose = Util.message.subscribe({
                 if(it.keys.contains(item.pubnubChannel + prefs.pubnubUuid)) {
-                    item.count++
                     binding.tvRvMessage.text = it[item.pubnubChannel + prefs.pubnubUuid]!!.text
                     BindingAdapter.getDateTime(binding.tvRvDay, it[item.pubnubChannel + prefs.pubnubUuid]!!.timeToken / 10000)
-                    if(item.count > 0){
-                        binding.badge.text = item.count.toString()
-                        binding.badge.visibility = View.VISIBLE
-                    } else {
-                        binding.badge.visibility = View.GONE
-                    }
+                    binding.badge.visibility = View.VISIBLE
                 }
             }, {
                 it.printStackTrace()
@@ -75,6 +61,11 @@ class ChatRoomListAdapter(val onClickChatRoomListener: OnClickChatRoomListener, 
                 if(it.keys.contains(item.pubnubChannel + prefs.pubnubUuid)) {
                     binding.tvRvMessage.text = it[item.pubnubChannel + prefs.pubnubUuid]!!.text
                     BindingAdapter.getDateTime(binding.tvRvDay, it[item.pubnubChannel + prefs.pubnubUuid]!!.timeToken / 10000)
+                    if(prefs.preferences.getLong(item.pubnubChannel + prefs.pubnubUuid, 0L) < it[item.pubnubChannel + prefs.pubnubUuid]!!.timeToken){
+                        binding.badge.visibility = View.VISIBLE
+                    } else {
+                        binding.badge.visibility = View.GONE
+                    }
                 }
             }, {
                 it.printStackTrace()
@@ -87,26 +78,6 @@ class ChatRoomListAdapter(val onClickChatRoomListener: OnClickChatRoomListener, 
             )
         }
 
-        fun subscribeCount(item : ChatRoomItemModel) {
-            badgeDispose = Util.badge.subscribe({
-                if(it.key == item.pubnubChannel + prefs.pubnubUuid){
-                    item.count = it.value.toInt()
-                    if(item.count > 0){
-                        binding.badge.text = item.count.toString()
-                        binding.badge.visibility = View.VISIBLE
-                    } else {
-                        binding.badge.visibility = View.GONE
-                    }
-                }
-            }, {
-                it.printStackTrace()
-            })
-
-            Util.compositeDisposable.add(
-                badgeDispose!!
-            )
-        }
-
         fun remove() {
             if (adapterMessageDispose != null) {
                 Util.compositeDisposable.remove(
@@ -116,12 +87,6 @@ class ChatRoomListAdapter(val onClickChatRoomListener: OnClickChatRoomListener, 
             if(messageDispose != null){
                 Util.compositeDisposable.remove(
                     messageDispose!!
-                )
-            }
-
-            if(badgeDispose != null){
-                Util.compositeDisposable.remove(
-                    badgeDispose!!
                 )
             }
         }

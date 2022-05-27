@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_message_right"
                 android:gravity="center_vertical"
-                android:maxWidth="310dp"
+                android:maxWidth="250dp"
                 android:paddingHorizontal="14dp"
                 android:paddingVertical="10dp"
                 android:text="@{item.text.trim()}"

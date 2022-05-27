@@ -88,11 +88,6 @@ class ChatListFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        Util.compositeDisposable.clear()
-    }
-
     override fun onPause() {
         super.onPause()
         if(Util.pubnub != null) {

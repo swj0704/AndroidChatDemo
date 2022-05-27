@@ -39,26 +39,7 @@ class ChatListFragment : Fragment() {
     @Inject
     lateinit var prefs: Prefs
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.chatRoom.observe(viewLifecycleOwner){
-            val intent = Intent(requireContext(), ChatActivity::class.java)
-            intent.putExtra("name", it.name)
-            intent.putExtra("pubnubChannel", it.pubnubChannel + prefs.pubnubUuid)
-            intent.putExtra("pubnubUUID", it.pubnubUUID)
-            startActivity(intent)
-        }
-
-        viewModel.subscribeList.observe(viewLifecycleOwner){
-            if(Util.pubnub != null) {
-                Util.pubnub!!.subscribe(
-                    channels = it,
-                    withPresence = true
-                )
-            }
-        }
-
-    }
+    
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,6 +55,23 @@ class ChatListFragment : Fragment() {
 
         binding.search.setOnClickListener {
             findNavController().navigate(R.id.action_chat_list_to_chat_search)
+        }
+
+        viewModel.chatRoom.observe(viewLifecycleOwner){
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            intent.putExtra("name", it.name)
+            intent.putExtra("pubnubChannel", it.pubnubChannel + prefs.pubnubUuid)
+            intent.putExtra("pubnubUUID", it.pubnubUUID)
+            startActivity(intent)
+        }
+
+        viewModel.subscribeList.observe(viewLifecycleOwner){
+            if(Util.pubnub != null) {
+                Util.pubnub!!.subscribe(
+                    channels = it,
+                    withPresence = true
+                )
+            }
         }
 
         binding.logout.setOnClickListener {

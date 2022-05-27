@@ -3,6 +3,7 @@ package com.wonjoon.androidchatdemo.view.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.wonjoon.androidchatdemo.databinding.ActivityLoginBinding
 import com.wonjoon.androidchatdemo.di.Prefs
@@ -34,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         viewModel.userItemModel.observe(this) {
+            Toast.makeText(this, "로그인에 성공했습니다", Toast.LENGTH_SHORT).show()
             prefs.name = it.name
             prefs.pubnubUuid = it.uuid
             startActivity(Intent(this, MainActivity::class.java))

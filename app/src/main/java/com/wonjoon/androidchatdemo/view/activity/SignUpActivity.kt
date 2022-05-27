@@ -2,6 +2,7 @@ package com.wonjoon.androidchatdemo.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.wonjoon.androidchatdemo.R
 import com.wonjoon.androidchatdemo.databinding.ActivitySignUpBinding
@@ -25,6 +26,7 @@ class SignUpActivity : AppCompatActivity() {
         binding.viewModel = viewModel
 
         viewModel.loginEvent.observe(this) {
+            Toast.makeText(this, "회원가입에 성공했습니다", Toast.LENGTH_SHORT).show()
             finish()
         }
 

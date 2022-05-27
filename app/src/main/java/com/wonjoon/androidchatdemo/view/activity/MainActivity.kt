@@ -2,6 +2,7 @@ package com.wonjoon.androidchatdemo.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.navigation.findNavController
 import com.wonjoon.androidchatdemo.R
 import com.wonjoon.androidchatdemo.databinding.ActivityMainBinding
 import com.wonjoon.androidchatdemo.di.Prefs
@@ -24,5 +25,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Util.initPubNubInstance(prefs.pubnubUuid)
+    }
+
+    override fun onBackPressed() {
+        if (!findNavController(R.id.nav_host).popBackStack()) {
+            super.onBackPressed()
+        }
     }
 }

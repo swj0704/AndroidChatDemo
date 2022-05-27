@@ -34,6 +34,10 @@ class ChatListViewModel @Inject constructor(
     val subscribeList : LiveData<List<String>>
         get() = _subscribeList
 
+    private val _isChatListEmpty = MutableLiveData<Boolean>()
+    val isChatListEmpty : LiveData<Boolean>
+        get() = _isChatListEmpty
+
     val listener by lazy{
         object : OnClickChatRoomListener{
             override fun onClick(chatRoomItemModel: ChatRoomItemModel) {
@@ -56,6 +60,8 @@ class ChatListViewModel @Inject constructor(
             adapter.submitList(list)
 
             val lastMessageList = ArrayList<String>()
+
+            _isChatListEmpty.value = list.isEmpty()
 
             list.forEach{
                 lastMessageList.add(it.pubnubChannel + prefs.pubnubUuid)

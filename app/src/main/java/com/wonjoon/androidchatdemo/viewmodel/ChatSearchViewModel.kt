@@ -24,6 +24,10 @@ class ChatSearchViewModel @Inject constructor(
     val chatRoom : LiveData<ChatRoomItemModel>
         get() = _chatRoom
 
+    private val _isChatListEmpty = MutableLiveData<Boolean>()
+    val isChatListEmpty : LiveData<Boolean>
+        get() = _isChatListEmpty
+
     private val onClickChatRoom by lazy{
         object : OnClickChatSearchListener{
             override fun onClick(chatRoom: ChatRoomItemModel) {
@@ -50,6 +54,8 @@ class ChatSearchViewModel @Inject constructor(
         viewModelScope.launch {
             val list = searchChatRoomUseCase(text)
             adapter.submitList(list)
+
+            _isChatListEmpty.value = list.isEmpty()
         }
     }
 }

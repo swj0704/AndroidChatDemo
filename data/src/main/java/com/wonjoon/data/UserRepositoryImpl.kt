@@ -11,9 +11,9 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     val dao: UserDao
 ) : UserRepository {
-    override suspend fun login(email: String, password: String): UserItemModel? {
+    override suspend fun login(id: String, password: String): UserItemModel? {
         return try {
-            dao.login(email, password).map {
+            dao.login(id, password).map {
                 UserMapper.dataToDomain(it)
             }[0]
         } catch (e : Exception){
@@ -22,9 +22,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signup(email: String, password: String, name: String) {
+    override suspend fun signup(id: String, password: String, name: String) {
          try {
-             return dao.signup(User(email, password, name, UUID.randomUUID().toString()))
+             return dao.signup(User(id, password, name, UUID.randomUUID().toString()))
         } catch (e : Exception){
             e.printStackTrace()
              return

@@ -19,12 +19,12 @@ class LoginViewModel @Inject constructor(
     val userItemModel : LiveData<UserItemModel>
         get() = _userItemModel
 
-    val email = MutableLiveData<String>("")
+    val id = MutableLiveData<String>("")
     val password = MutableLiveData<String>("")
 
-    fun login(email : String, password : String){
+    fun login(id : String, password : String){
         viewModelScope.launch {
-            val user = loginUseCase(email, password)
+            val user = loginUseCase(id, password)
             if(user != null) {
                 _userItemModel.value = user!!
             }

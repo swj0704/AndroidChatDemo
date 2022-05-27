@@ -5,7 +5,7 @@ import com.wonjoon.domain.UserItemModel
 import com.wonjoon.domain.UserRepository
 
 class LoginUseCase(val repository: UserRepository) : UseCase {
-    suspend operator fun invoke(email : String, password : String) : UserItemModel? {
-        return repository.login(email, password)
+    suspend operator fun invoke(id : String, password : String) : UserItemModel? {
+        return repository.login(id, password)
     }
 }

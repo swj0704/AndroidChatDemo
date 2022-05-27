@@ -29,12 +29,12 @@
 
 
         <TextView
-            android:id="@+id/signup_email_title"
+            android:id="@+id/signup_id_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="63dp"
             android:layout_marginTop="42dp"
-            android:text="Email"
+            android:text="ID"
             android:textColor="@color/main_color"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,18 +42,18 @@
 
 
         <EditText
-            android:id="@+id/signup_email_text"
+            android:id="@+id/signup_id_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="64dp"
-            android:hint="Email을 입력해주세요."
-            android:text="@={viewModel.email}"
+            android:hint="ID를 입력해주세요."
+            android:text="@={viewModel.id}"
             android:paddingBottom="9dp"
             android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signup_email_title" />
+            app:layout_constraintTop_toBottomOf="@+id/signup_id_title" />
 
         <TextView
             android:id="@+id/signup_password_title"
@@ -65,7 +65,7 @@
             android:textColor="@color/main_color"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/signup_email_text" />
+            app:layout_constraintTop_toBottomOf="@id/signup_id_text" />
 
 
         <EditText
@@ -118,8 +118,8 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:onClick="@{() -> viewModel.signUp(viewModel.email, viewModel.password, viewModel.name)}"
-            android:backgroundTint="@{viewModel.email.empty ? @color/gray : (viewModel.password.empty ? @color/gray : (viewModel.name.empty ? @color/gray : @color/main_color))}"
+            android:onClick="@{() -> viewModel.signUp(viewModel.id, viewModel.password, viewModel.name)}"
+            android:backgroundTint="@{viewModel.id.empty ? @color/gray : (viewModel.password.empty ? @color/gray : (viewModel.name.empty ? @color/gray : @color/main_color))}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signup_name_text" />

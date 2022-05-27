@@ -7,7 +7,7 @@ object UserMapper {
     fun dataToDomain(user : User) : UserItemModel{
         return UserItemModel(
             name = user.name,
-            email = user.email,
+            id = user.id,
             password = user.password,
             uuid = user.uuid
         )

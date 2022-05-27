@@ -14,16 +14,16 @@ class SignUpViewModel @Inject constructor(
     val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
 
-    val email = MutableLiveData<String>("")
+    val id = MutableLiveData<String>("")
     val password = MutableLiveData<String>("")
     val name = MutableLiveData<String>("")
 
     val loginEvent = SingleLiveEvent<Unit>()
 
-    fun signUp(email : String, password : String, name : String){
-        if(email.isNotBlank() && password.isNotBlank() && name.isNotBlank()) {
+    fun signUp(id : String, password : String, name : String){
+        if(id.isNotBlank() && password.isNotBlank() && name.isNotBlank()) {
             viewModelScope.launch {
-                signUpUseCase(email, password, name)
+                signUpUseCase(id, password, name)
                 loginEvent.call()
             }
         }

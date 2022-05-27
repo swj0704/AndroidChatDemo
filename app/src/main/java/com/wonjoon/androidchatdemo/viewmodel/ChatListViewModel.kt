@@ -11,6 +11,7 @@ import com.wonjoon.androidchatdemo.di.Prefs
 import com.wonjoon.androidchatdemo.model.ChatItemModel
 import com.wonjoon.androidchatdemo.model.ChatMessageData
 import com.wonjoon.androidchatdemo.model.PubnubChatObject
+import com.wonjoon.androidchatdemo.util.SingleLiveEvent
 import com.wonjoon.androidchatdemo.util.Util
 import com.wonjoon.androidchatdemo.view.adapter.ChatRoomListAdapter
 import com.wonjoon.androidchatdemo.view.adapter.OnClickChatRoomListener
@@ -26,15 +27,15 @@ class ChatListViewModel @Inject constructor(
     val prefs: Prefs
 ) : ViewModel() {
 
-    private val _chatRoom = MutableLiveData<ChatRoomItemModel>()
+    private val _chatRoom = SingleLiveEvent<ChatRoomItemModel>()
     val chatRoom : LiveData<ChatRoomItemModel>
         get() = _chatRoom
 
-    private val _subscribeList = MutableLiveData<List<String>>()
+    private val _subscribeList = SingleLiveEvent<List<String>>()
     val subscribeList : LiveData<List<String>>
         get() = _subscribeList
 
-    private val _isChatListEmpty = MutableLiveData<Boolean>()
+    private val _isChatListEmpty = SingleLiveEvent<Boolean>()
     val isChatListEmpty : LiveData<Boolean>
         get() = _isChatListEmpty
 

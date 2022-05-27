@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wonjoon.androidchatdemo.util.SingleLiveEvent
 import com.wonjoon.androidchatdemo.view.adapter.ChatSearchAdapter
 import com.wonjoon.androidchatdemo.view.adapter.OnClickChatSearchListener
 import com.wonjoon.domain.ChatRoomItemModel
@@ -20,11 +21,11 @@ class ChatSearchViewModel @Inject constructor(
     val insertChatRoomUseCase: InsertChatRoomUseCase
 ) : ViewModel() {
 
-    private val _chatRoom = MutableLiveData<ChatRoomItemModel>()
+    private val _chatRoom = SingleLiveEvent<ChatRoomItemModel>()
     val chatRoom : LiveData<ChatRoomItemModel>
         get() = _chatRoom
 
-    private val _isChatListEmpty = MutableLiveData<Boolean>()
+    private val _isChatListEmpty = SingleLiveEvent<Boolean>()
     val isChatListEmpty : LiveData<Boolean>
         get() = _isChatListEmpty
 

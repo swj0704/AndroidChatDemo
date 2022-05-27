@@ -39,22 +39,8 @@ class ChatListFragment : Fragment() {
     @Inject
     lateinit var prefs: Prefs
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.search.setOnClickListener {
-            findNavController().navigate(R.id.action_chat_list_to_chat_search)
-        }
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel.chatRoom.observe(viewLifecycleOwner){
             val intent = Intent(requireContext(), ChatActivity::class.java)
             intent.putExtra("name", it.name)
@@ -70,6 +56,24 @@ class ChatListFragment : Fragment() {
                     withPresence = true
                 )
             }
+        }
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.search.setOnClickListener {
+            findNavController().navigate(R.id.action_chat_list_to_chat_search)
         }
 
         binding.logout.setOnClickListener {

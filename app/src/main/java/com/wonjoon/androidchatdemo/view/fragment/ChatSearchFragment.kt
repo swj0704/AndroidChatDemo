@@ -43,6 +43,22 @@ class ChatSearchFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+        viewModel.chatRoom.observe(viewLifecycleOwner){
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            intent.putExtra("name", it.name)
+            intent.putExtra("pubnubChannel", it.pubnubChannel + prefs.pubnubUuid)
+            intent.putExtra("pubnubUUID", it.pubnubUUID)
+            startActivity(intent)
+            Handler(Looper.myLooper()!!).postDelayed({
+                findNavController().navigateUp()
+            }, 100)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.searchChatRoom("")
@@ -62,17 +78,6 @@ class ChatSearchFragment : Fragment() {
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
-        }
-
-        viewModel.chatRoom.observe(viewLifecycleOwner){
-            val intent = Intent(requireContext(), ChatActivity::class.java)
-            intent.putExtra("name", it.name)
-            intent.putExtra("pubnubChannel", it.pubnubChannel + prefs.pubnubUuid)
-            intent.putExtra("pubnubUUID", it.pubnubUUID)
-            startActivity(intent)
-            Handler(Looper.myLooper()!!).postDelayed({
-                findNavController().navigateUp()
-            }, 100)
         }
 
         textChange
